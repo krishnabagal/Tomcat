@@ -12,8 +12,8 @@ hostip=`ip route get 1 | awk '{print $NF;exit}'`
 user="USERNAME"
 password="PASSWORD"
 
-T8080=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8080 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8080\" |awk {'print $3'}`
-M8080=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8080 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
+T8080=`check_tomcat.py -H $hostip -p 8080 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8080\" |awk {'print $3'}`
+M8080=`check_tomcat.py -H $hostip -p 8080 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
 if ! [[ $T8080 =~ $value ]] ; 
 then
            /usr/bin/gmetric --name  Tomcat-Thread-8080 --value 0 --type int32 --unit Count
@@ -27,8 +27,8 @@ else
          
            /usr/bin/gmetric --name  Tomcat-Memory-8080 --value $M8080 --type int32 --unit %
 fi
-T8081=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8081 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8081\" |awk {'print $3'}`
-M8081=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8081 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
+T8081=`check_tomcat.py -H $hostip -p 8081 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8081\" |awk {'print $3'}`
+M8081=`check_tomcat.py -H $hostip -p 8081 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
 if ! [[ $T8081 =~ $value ]] ; 
 then
            /usr/bin/gmetric --name  Tomcat-Thread-8081 --value 0 --type int32 --unit Count
@@ -42,8 +42,8 @@ else
          
            /usr/bin/gmetric --name  Tomcat-Memory-8081 --value $M8081 --type int32 --unit %
 fi
-T8082=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8082 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8082\" |awk {'print $3'}`
-M8082=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8082 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
+T8082=`check_tomcat.py -H $hostip -p 8082 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8082\" |awk {'print $3'}`
+M8082=`check_tomcat.py -H $hostip -p 8082 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
 if ! [[ $T8082 =~ $value ]] ;
 then
            /usr/bin/gmetric --name  Tomcat-Thread-8082 --value 0 --type int32 --unit Count
@@ -56,8 +56,8 @@ then
 else
            /usr/bin/gmetric --name  Tomcat-Memory-8082 --value $M8082 --type int32 --unit %
 fi
-T8083=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8083 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8083\" |awk {'print $3'}`
-M8083=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8083 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
+T8083=`check_tomcat.py -H $hostip -p 8083 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8083\" |awk {'print $3'}`
+M8083=`check_tomcat.py -H $hostip -p 8083 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
 if ! [[ $T8083 =~ $value ]] ;
 then
            /usr/bin/gmetric --name  Tomcat-Thread-8083 --value 0 --type int32 --unit Count
@@ -70,8 +70,8 @@ then
 else
            /usr/bin/gmetric --name  Tomcat-Memory-8083 --value $M8083 --type int32 --unit %
 fi
-T8084=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8084 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8084\" |awk {'print $3'}`
-M8084=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8084 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
+T8084=`check_tomcat.py -H $hostip -p 8084 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8084\" |awk {'print $3'}`
+M8084=`check_tomcat.py -H $hostip -p 8084 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
 if ! [[ $T8084 =~ $value ]] ;
 then
            /usr/bin/gmetric --name  Tomcat-Thread-8084 --value 0 --type int32 --unit Count
@@ -84,8 +84,8 @@ then
 else
            /usr/bin/gmetric --name  Tomcat-Memory-8084 --value $M8084 --type int32 --unit %
 fi
-T8085=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8085 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8085\" |awk {'print $3'}`
-M8085=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8085 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
+T8085=`check_tomcat.py -H $hostip -p 8085 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8085\" |awk {'print $3'}`
+M8085=`check_tomcat.py -H $hostip -p 8085 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
 if ! [[ $T8085 =~ $value ]] ;
 then
            /usr/bin/gmetric --name  Tomcat-Thread-8085 --value 0 --type int32 --unit Count
@@ -98,8 +98,8 @@ then
 else
            /usr/bin/gmetric --name  Tomcat-Memory-8085 --value $M8085 --type int32 --unit %
 fi
-T8086=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8086 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8086\" |awk {'print $3'}`
-M8086=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8086 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
+T8086=`check_tomcat.py -H $hostip -p 8086 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8086\" |awk {'print $3'}`
+M8086=`check_tomcat.py -H $hostip -p 8086 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
 if ! [[ $T8086 =~ $value ]] ;
 then
            /usr/bin/gmetric --name  Tomcat-Thread-8086 --value 0 --type int32 --unit Count
@@ -112,8 +112,8 @@ then
 else
            /usr/bin/gmetric --name  Tomcat-Memory-8086 --value $M8086 --type int32 --unit %
 fi
-T8087=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8087 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8087\" |awk {'print $3'}`
-M8087=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8087 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
+T8087=`check_tomcat.py -H $hostip -p 8087 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8087\" |awk {'print $3'}`
+M8087=`check_tomcat.py -H $hostip -p 8087 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
 if ! [[ $T8087 =~ $value ]] ;
 then
            /usr/bin/gmetric --name  Tomcat-Thread-8087 --value 0 --type int32 --unit Count
@@ -126,8 +126,8 @@ then
 else
            /usr/bin/gmetric --name  Tomcat-Memory-8087 --value $M8087 --type int32 --unit %
 fi
-T8088=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8088 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8088\" |awk {'print $3'}`
-M8088=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8088 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
+T8088=`check_tomcat.py -H $hostip -p 8088 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8088\" |awk {'print $3'}`
+M8088=`check_tomcat.py -H $hostip -p 8088 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
 if ! [[ $T8088 =~ $value ]] ;
 then
            /usr/bin/gmetric --name  Tomcat-Thread-8088 --value 0 --type int32 --unit Count
@@ -140,8 +140,8 @@ then
 else
            /usr/bin/gmetric --name  Tomcat-Memory-8088 --value $M8088 --type int32 --unit %
 fi
-T8089=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8089 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8089\" |awk {'print $3'}`
-M8089=`/usr/local/bin/scripts/check_tomcat.py -H $hostip -p 8089 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
+T8089=`check_tomcat.py -H $hostip -p 8089 -u $user -a $password -m thread -w 999 -c 1000 -U "/manager" -C \"http-bio-8089\" |awk {'print $3'}`
+M8089=`check_tomcat.py -H $hostip -p 8089 -u $user -a $password -m mem -w 90 -c 99 | cut -d= -f2 |cut -d% -f1`
 if ! [[ $T8089 =~ $value ]] ;
 then
            /usr/bin/gmetric --name  Tomcat-Thread-8089 --value 0 --type int32 --unit Count
