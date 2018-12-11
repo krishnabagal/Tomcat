@@ -1,0 +1,138 @@
+#!/bin/sh
+#
+# Startup / Shutdown script for Tomcat
+ 
+# The location of the tomcat directory
+CATALINA_HOME=<TOMCAT-HOME-DIRECTORY>
+export CATALINA_HOME
+DATE=$(date +%d%m%Y%H%M%S) 
+
+# JVM options
+CATALINA_OPTS="-Xms<MIN-MEMORY>m -Xmx<MAX-MEMORY>m -XX:PermSize=256m -XX:MaxPermSize=512m -Dsun.net.inetaddr.ttl=3600 -Xloggc:/tmp/gc_tomcat_$DATE.txt -XX:-PrintGC -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -XX:-PrintTenuringDistribution"
+export CATALINA_OPTS
+export JAVA_OPTS="-Duser.timezone=Asia/Calcutta -server"
+
+# The user with which the tomcat is executed
+TOMCAT_USER="tomcat"
+ 
+#JAVA_OPTS="${JAVA_OPTS} -noverify -Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,address=8765,server=y,suspend=n"
+#export JAVA_OPTS
+# Generation of a unique name for the tomcat and its PID file which contains the PID of the runnign server
+NAME=`basename ${CATALINA_HOME}`
+CATALINA_PID="${CATALINA_HOME}/.pid"
+export CATALINA_PID
+ 
+# Start and Stop scripts of tomcat
+START_TOMCAT=${CATALINA_HOME}/bin/startup.sh
+STOP_TOMCAT=${CATALINA_HOME}/bin/shutdown.sh
+ 
+# Java home directory
+JAVA_HOME=<JDK-HOME-DIR-PATH>
+export JAVA_HOME
+ 
+start()
+{
+        if [ ! -f $CATALINA_PID ]
+        then
+                echo -n "Starting tomcat: "
+                su -c "touch ${CATALINA_PID}" ${TOMCAT_USER}
+                su -c ${START_TOMCAT} ${TOMCAT_USER}
+                echo "done."
+        else
+                echo "$NAME already running ..."
+        fi
+}
+ 
+stop()
+{
+        if [ -f $CATALINA_PID ]
+        then
+                echo -n "Shutting down tomcat: "
+                su -c "${STOP_TOMCAT} -force" ${TOMCAT_USER}
+                echo "done."
+                su -c "rm -f $CATALINA_PID" ${TOMCAT_USER}
+        else
+                echo "$NAME is not running"
+        fi
+ 
+        pids=`ps -u ${TOMCAT_USER} -U ${TOMCAT_USER} u | grep ${CATALINA_HOME} | grep "org.apache.catalina.startup.Bootstrap"`
+        if [ ! -z "${pids}" ]
+        then
+                echo "Manually killing tomcats using"
+                kill -9 ${pids}
+        fi
+}
+ 
+status()
+{
+        if [ -f $CATALINA_PID ]
+        then
+                echo "$NAME is RUNNING"
+        else
+                pids=`ps -u ${TOMCAT_USER} -U ${TOMCAT_USER} u | grep ${CATALINA_HOME} | grep "org.apache.catalina.startup.Bootstrap" | wc -l`
+                if [ $pids -ne 0 ]
+                then
+                        echo "$NAME is in STALE State"
+                else
+                        echo "$NAME is STOPPED"
+                fi
+        fi
+}
+ 
+heapdump()
+{
+        pids=$(/bin/cat $CATALINA_PID 2> /dev/null)
+        if [ -z $pids ]; then
+                echo "Error getting the PID, could not dump heap.";
+                exit 1;
+        fi
+        echo "Trying to dump heap."
+        FILE=/tmp/$NAME-pid-${pids}-$(date +%d-%m-%Y-%I-%M).hprof
+        su -c "$JAVA_HOME/bin/jmap -dump:format=b,file=${FILE} $pids" ${TOMCAT_USER}
+        if [ -f $FILE ]; then
+        su -c "chmod 0644 $FILE" ${TOMCAT_USER}
+        echo "Heap dump taken on $(hostname --short) for instance $CATALINA_HOME : $FILE"
+        fi
+}
+threaddump()
+{
+        pids=$(/bin/cat $CATALINA_PID 2> /dev/null)
+        if [ -z $pids ]; then
+                echo "Error getting the PID, could not dump thread.";
+                exit 1;
+        fi
+        echo "Trying to dump thread."
+        FILE=/tmp/$NAME-pid-${pids}-$(date +%d-%m-%Y-%I-%M)-thread_dump.log
+        su -c "$JAVA_HOME/bin/jstack -l $pids >${FILE}" ${TOMCAT_USER}
+        if [ -f $FILE ]; then
+        su -c "chmod 0644 $FILE" ${TOMCAT_USER}
+        echo "Thread dump taken on $(hostname --short) for instance $CATALINA_HOME : $FILE"
+        fi
+}
+ 
+# See how we were called
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart)
+        stop
+        sleep 10
+        start
+        ;;
+  heapdump)
+          heapdump
+          ;;
+  threaddump)
+          threaddump
+          ;;
+  status)
+        status
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart|status|heapdump|threaddump}"
+esac
+
