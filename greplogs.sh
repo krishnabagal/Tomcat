@@ -22,7 +22,7 @@ SED="/bin/sed"
 cat /dev/null > $MAILFILELOCATION
 
 # Filter last/old 5 min logs from file.
-$SED -n "/$last5min/ , /$curhour/p" $FILEPATH > $MAILFILELOCATION
+$SED -n "/$LASTFIVEMIN/ , /$CURRENTHOUR/p" $FILEPATH > $MAILFILELOCATION
  
 cat $MAILFILELOCATION |egrep -i "$EXCEPTIONSTRING"
  
